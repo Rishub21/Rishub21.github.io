@@ -1230,11 +1230,10 @@
 
 	#banner {
 		background-attachment: scroll,						fixed;
-		background-color: #494d53;
-		background-image: url("wascapa.jpg");
-		background-position: top left,					center center;
-		background-repeat: repeat,						no-repeat;
-		background-size: auto,						cover;
+		background-color: violet;
+		background: url("../images/nyc2.jpg");
+		background-size: 50%;
+
 		color: #d1d2d4;
 		padding: 16em 0;
 		position: relative;

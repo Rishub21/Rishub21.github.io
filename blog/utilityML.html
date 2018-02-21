@@ -4,7 +4,7 @@
  <head>
 	 <title> Utility ML </title>
 
-	 
+
 	 <!-- Compiled and minified CSS -->
 	 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -54,7 +54,11 @@
   				<img style = "padding-top: 1%; float : left" src = "images/unNormalData.png" width = 50% height  = 600px>
           <img style = "padding-left: 2%;" src = "images/normalizedData.png" width = 50% height  = 600px>
           <p style = "padding-top: 1%" align = "center"> <i> Taking data on right and normalizing it on a 0-1 scale (left) will allow our modell to optimize the parameters more accurately. This will also be very important when we conduct dimensionality reduction later on. </i> </p>
+          <p style = "padding-top: 1%">  We are going to reserve the last 3 years of data we have as our test set. The years before we are going to do an 80:20 split to get our training and validation set. Our training set will as the name suggests "train" our model and tune the parameters. Our models that do the best on the validation, will then be backtested on our test set to see their profitability. </p>
+
         </div>
+
+
 				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> First Model </h4>
 				<p style = "padding-top: 1%"> Finally we can start talking about our first model. We are faced with a binary classification problem. We want the computer to predict, based off the factors of that month, a buy signal (1) or a sell signal (0). Lets look in our toolbox. A linear regression wouldn’t make sense because it predicts continuous y values based on our x parameters. We want to in essence “cap” the regression so it can only predict a 0 or a 1. </p>
 				<p style = "padding-top: 1%"> To illustrate the difference between linear and logistic regression, let  x be our vector of parameters (PEG ratio, PE ratio, etc) and 𝛳 be the vector of weights for each of those parameters.  </p>
@@ -74,13 +78,13 @@
           <hr style = "color : red">
 
 
-    			<img style = "padding-top: 1%;" src = "images/firstModel.png" width = 100% height  = 600px>
+    			<img style = "padding-top: 1%;" src = "images/firstModel.png" width = 100% >
           <p style = "padding-top: 1%"> We run the code and get the following results
-          <img style = "padding-top: 1%;" src = "images/1stmodelResults.png" width = 100% height  = 200px>
+          <img style = "padding-top: 1%;" src = "images/mlUtility/firstModelResults.png" >
 
           <hr style = "color : red">
 
-          <p style = "padding-top: 1%"> Not bad, after just 30 lines of code, our model is already predicting with near 60% accuracy, better than random already. But don’t get your hopes up, all those 40% times where we make the wrong call is where we can lose big money. Plus it looks like our model is missing a lot of sell calls. 109 times we predicted a buy when it should have been a sell. Let’s try to push this thing and really see how accurate we can be.
+          <p style = "padding-top: 1%"> Not bad, after just 30 lines of code, our model is already predicting better than random. But don’t get your hopes up, all those 48% times where we make the wrong call is where we can lose big money. Plus it looks like our model is missing a lot of sell calls. 98 times we predicted a buy when it should have been a sell. Let’s try to push this thing and really see how accurate we can be.
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%">  Model 2 : Significant Factors </h4>
           <p style = "padding-top: 1%"> My concern is that of the 70 factors, a lot of them are just noise that are cluttering our model. If we can isolate the most useful factors and train our model off of those, perhaps we can get better results.
               With the handy summary command in r, we automatically get a list of all the factors and their p-values in our original model. P-value being the probability that the specific factor has a weight of zero and had no effect in the regression. The factors with low p-values <.05 are statistically significant and as a result have large coefficients or 𝛳 values in the regression. We are going to be using only those statistically significant factors in our second regression
@@ -106,9 +110,9 @@
           <p style = "padding-top: 1%">Notice something interesting? Out of the 14 factors,  7 were debt related ratios. This is no coincidence. Utility companies must take on large amounts of debt because of the capital intensive nature of the industry. Thus, the companies that are able to utilize that debt efficiently, position themselves for strong growth in their equity prices. This is pretty cool. With no fundamental knowledge of this industry before hand, our model, as simple as it is, was able to detect this industry insight. Of course I’m not saying that our model is in anyway a replacement for solid industry research. It is however a data driven way for us to create and confirm hypothesis about the industry.
 
           <p style = "padding-top: 1%"> When we run our original model just on these significant factors we get :
-            <img style = "padding-top: 5%;" src = "images/sigfactorsResults.png" width = 100%>
+            <img style = "padding-top: 5%;" src = "images/mlUtility/secondModelResults.png" width = 100%>
 
-          <p style = "padding-top: 1%"> So our accuracy went down a hair. More concerning though is if you look at it closely, our model is pretty much just predicting buy, 95% of the time to be exact. That’s not much different from a long only strategy. I’m not content with this, so lets try another strategy for dimensionality reduction
+          <p style = "padding-top: 1%"> So our accuracy actually shot up a good bit. The thing that concerns me though is that if you look at it closely, our model is pretty much just predicting buy, 94% of the time to be exact. That’s not much different from a long only strategy. I’m not content with this, so lets try another strategy for dimensionality reduction
 
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Model 3 : Principal Component Analysis (PCA) </h4>
           <p style = "padding-top: 1%"> If you’re unfamiliar or rusty with PCA, no worries. I’ll go over the intuition.
@@ -123,17 +127,17 @@
           <img style = "padding-top: 5%;" src = "images/PCSummaryGraph.png" width = 100%>
 
           <p style = "padding-top: 5%"> When we run the original model on the first 21 components we get :
-            <img style = "padding-top: 5%;" src = "images/PCAResults.png" width = 100%>
-          <p style = "padding-top: 5%"> Our model is about as accurate as when we just took the significant factors, but at least we are better about predicting sell signals a bit. I suppose that's an improvement. All in all though dimensionality reduction by itself didn't quite give us the improvements in accuracy that we were looking for, if anything it made our model slightly less accurate.
+            <img style = "padding-top: 5%;" src = "images/mlUtility/thirdModelResults.png" width = 100%>
+          <p style = "padding-top: 5%"> With PCA, our model is about as accurate it originally was. However, it is much worse than before at predicting sell signals.
           <p style = "padding-top: 1%">  I wonder. Perhaps a binary classification between buy and sell is not enough. Perhaps introducing a hold signal would be useful. My thought is if our program only learns from the best examples of buy or sell, those where the price fluctuates greatly, then it will be able to produce better predictions. For example, right now if the price of a stock goes up by .1% vs down by .1%, how much of a difference is there really in the factors? Probably not much. Between a 5% up vs a 5% down, there is probably a more substantial difference, and we want our model to focus on that.
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Model 4 : Linear Discriminant Analysis (LDA) </h4>
           <p style = "padding-top: 1%"> We are going to move away from binary classification by using Linear Discriminant Analysis, a second dimensionality reduction technique that might help us out
           <p style = "padding-top: 1%"> You can think of LDA as a supervised clustering algorithm of sorts. The LDA is similar to the PCA in that it is meant to project data onto a lower dimensional subspace. However, instead of trying to minimize perpendicular squared errors, we are trying to form distinct groups of the data where we  maximize the space between the groups’ means  and minimize the variation within each group. Essentially, we are trying to make tight and well separated clusters of our data.
             <img style = "padding-top: 2%;" src = "images/LDAPic2.png" align = "center" width = 100% height = 500px>
           <p style = "padding-top: 1%"> This is a good idea of what’s going on.  In both the left and the right line, the 2D data is being projected onto a lower 1 dimensional subspace. The left line however, has groupings that are all mixed together and is therefore a bad choice. The right line has clearly separated groups. This way, in the future, given a set of factors we can project that data onto either the red blue or green part of the line and predict the corresponding category for that data. It’s just instead of red blue green we are doing buy, sell, hold.
-          <p style = "padding-top: 1%">  To make sure we are giving our computer only the very best examples of a buy and sell label. I made a modification to our processing script so that it labels a month a buy only if the next month moves up in price in a magnitude that is greater than the average price increase throughout the entire time span.
+          <p style = "padding-top: 1%">  To make sure we are giving our computer only the very best examples of a buy and sell label. I made a modification to our processing script so that it labels a month a buy only if the next month moves up in price in a magnitude that is greater than the average price increase has been up until that point. I did the same for sells, and the rest of the times when the stock doesn't move enough, I labeled the month as a hold.
           <p style = "padding-top: 1%">  When we run this new model, (note: this is no longer a logistic regression) we get:
-            <img style = "padding-top: 2%;" src = "images/LDAResults.png"  width = 100% >
+            <img style = "padding-top: 2%;" src = "images/mlUtility/LDAResults.png"  width = 100% >
           <p style = "padding-top: 1%">  Uhh, our model is really only predicting holds. I thought about this for a bit and I guess we were a little too harsh in our standards of labeling what is a buy and what is a sell. As such, most of our labels in our training data were holds, and our model probably just didn’t get to train on enough examples of buys and sells.  When I relabled with looser standards we were getting a similar accuracy, it's just that then the model was back to the problem of really only predicting buys signals. Let’s look into why this may be the case. The figure below shows the clusters of buys (1), sells (-1), and holds (0) that our model generated.
             <img style = "padding-top: 2%;" src = "images/LDAGraph.png"  width = 100% >
           <p style = "padding-top: 1%"> As you can see our LDA was utterly ineffective in projecting our data. Instead of well demarcated clusters, we just got a mess, suggesting there is simply too much noise to make a clean linear classification.
@@ -143,26 +147,31 @@
               <p style = "padding-top: 1%"> A neural network is a way for us to capture non linear relationships in our data. I built one with the Keras library. Ultimately it was utterly unsuccessful and only predicted sell signals. I’m far from an expert in neural networks, but after building some rough models I really doubt that there is any meaningful non linear relationship in our data. Because of this I’m actually not going to explain how I built it right now. The explanation is a bit involved. If you are curious I’ll link a write up I made about it in the appendix, but for now let’s start testing our strategies and see if we can make some money!
 
             <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Backtesting </h4>
-            <p style = "padding-top: 1%"> Backtesting is the process by which we are going to test our strategy on historical data.  I created a script to handle the process for us. For the first backtest, I’m going to test our strategy for each company against a random and long only strategy (one where we buy at the beginning and just hold for the entire period). I’m testing our original strategy first because it had the highest accuracy. The backtest was conducted with $10,000 starting for each company. The average returns across all companies were then calculated.
-              <img style = "padding-top: 2%;" src = "images/Backtest1Comps.png"  width = 100% >
-              <p style = "padding-top: 1%"> Alright so as shown by the graph, in almost all cases, our strategy soundly beat random, and in fact many times even edged out long only. I was especially interested by this because that shows that our trading strategy is generating real alpha. In fact it produced over 100% extra ROI than a long only strategy. Of course, this is still far from a perfect strategy, which would have yielded us nearly 800% ROI  during this time span.
+            <p style = "padding-top: 1%"> Backtesting is the process by which we are going to test our strategy on historical data.  I created a script to handle the process for us and we will backtest against the last 3 years of historical data we have. For the first backtest, I’m going to test our strategy for each company against a random and long only strategy (one where we buy at the beginning and just hold for the entire period). I’m testing our second strategy (where we used only significant factors) because it had the highest accuracy on the validation set. The backtest was conducted with $10,000 starting for each company. The average risk adjusted returns across all companies were then calculated.
+              <img style = "padding-top: 2%;" src = "images/mlUtility/Backtest1.png"  width = 100% >
+              <p style = "padding-top: 1%"> Alright so as shown by the graph, in almost all cases, our strategy soundly beat random. It was on par with long only, though this was to be expected since we were mostly just predicting buy signals anyways.
                 <ul class = "browser-default">
-                  <li> AVERAGE STRAT RETURN: 270.877376727 %</li>
-                  <li> AVERAGE LONG RETURN: 148.994511756 % </li>
-                  <li> AVERAGE RANDOM RETURN: 68.3098106327 %</li>
-                  <li> AVERAGE PERFECT RETURN: 787.456431127 % </li>
+                  <li> AVERAGE STRAT RETURN: 4.11 %</li>
+                  <li> AVERAGE LONG RETURN: 4.14 % </li>
+                  <li> AVERAGE RANDOM RETURN: 0.18 %</li>
+                  <li> AVERAGE PERFECT RETURN: 14.13 % </li>
                 </ul>
-              <p style = "padding-top: 1%"> I’m interested in looking further into why our strategy beats a long only one, frankly I was just not expecting this. To analyze, I’m going to chart the year over year average returns from the backtest and see what trends we can find.
-                <img style = "padding-top: 2%;" src = "images/backtest1YearbyYear.png"  width = 100% >
+              <p style = "padding-top: 1%"> This shows just how close the two strategies are
+                <img style = "padding-top: 2%;" src = "images/mlUtility/backtest1b.png"  width = 100% >
 
-              <p style = "padding-top: 1%">This graph shows that the vast majority of our alpha generation comes in the form of a hedge against losses. That is, during periods of growth, our strategy really isn’t that useful, it continuously gets beat by a long only strategy. But, during periods of volatility and contraction, such as the crashes of 2001,2002, and 2008, our strategy outperforms the long only strategy.
-              <p style = "padding-top: 1%"> I’m still concerned about those outliers PEG, and EIX. Why is it that our strategy generates returns that dwarf those of long only for these particular stocks? I reran the backtest just on those two stocks and found this :
-                  <img style = "padding-top: 2%;" src = "images/OutliersYearover.png"  width = 100% >
-              <p style = "padding-top: 1%"> These particular stocks took heavy losses in 2000 as well as the other contractionary years. And in 2000, our strategy was not only able to hedge against loses but actually generate significant returns. This explains the increased returns of our strategy with these two stocks. In essence, the more periods of volatility and contraction a stock goes through, the better chance our strategy has to perform.
+              <p style = "padding-top: 1%">I'm interested in seeing if we can get more alpha by using our original strategy, which predicted more sells.
+                  <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest2.png"  width = 100% >
+              <p style = "padding-top: 1%"> Unfortunately, this one fared even worse. Does that mean our model is completely useless. Well not exactly. Lets say we backtest over the entire time period. I know this isn't realistic given that we are testing on data we trained on, but we might get some insights about our data.
+                  <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest3.png"  width = 100% >
+              <p style = "padding-top: 1%"> You'll notice that while our strategy does get beat during periods of growth, it does a good job hedging against losses during periods of contraction, most noteably 2001-2002 and 2008. Returns looked like this over the entire time span:
+                <ul class = "browser-default">
+                  <li> AVERAGE STRAT RETURN: 37.43 %</li>
+                  <li> AVERAGE LONG RETURN: 24.59 % </li>
+                  <li> AVERAGE PERFECT RETURN: 1033.13 % </li>
+                </ul>
               <p style = "padding-top: 1%">This got me thinking, what if we longed during bull markets and deployed our strategy only during bear markets. Maybe this best of both worlds approach will lead us to greater returns.
-                  <p style = "padding-top: 1%">I ran a version of the backtest which employed our strategy only during the years 2000-2002, and 2008. Sure enough, it achieved an average ROI of 301 % over the time span,  40% higher than what our strategy alone generated.
-                <p style = "padding-top: 1%">  This is great, but unfortunately this is the best we’ve got so far. The closest model in terms of accuracy to our original model was the one we made with PCA, but as you can see
-                  <img style = "padding-top: 2%;" src = "images/backtest2YearbyYear.png"  width = 100% >It failed to generate alpha, probably because it was less sensitive to predicting sell signals and thus couldn’t effectively hedge losses during downturns like our previous strategy could.
+                  <p style = "padding-top: 1%">I ran a version of the backtest which employed our strategy only during the years 2001,2002, and 2008. Sure enough, it achieved an average risk adjusted ROI of 43 % over the time span,  6% higher than what our strategy alone generated.
+                <p style = "padding-top: 1%">  Again, I realize it is unrealistic to test against data that we have trained on, however this graph shows that our strategy can perhaps be useful to deploy during bear markets.
 
               <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Moving Forward </h4>
                 <p style = "padding-top: 1%"> Throughout this whole process, creating more complicated models did not yield better returns. This means that the only way from here for us to push our alpha generation further is for us to come up with different factors that might have a large impact on the industry.

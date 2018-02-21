@@ -30,6 +30,7 @@
 
 		 <div class = "col s6">
 			 <h2 style = "font-family: 'Raleway', sans-serif; color: blue"> An ML Exploration of Utility Companies </h2>
+       <p> <b> by: Rishub Nahar </b>
 			 <hr style = "color : red">
 
 			 <p style = "padding-top: 5%"> This project was an experiment in trying to use some basic machine learning techniques to create a trading strategy that performs better than random. This isn’t a coding or a math tutorial, it is an exploration of how we might be able to work with our data to make more accurate models. I will explain whatever math and code needed, but all you need is an interest to learn more about machine learning or trading strategies. With that, let’s get started ! </p>
@@ -64,7 +65,7 @@
 				<p style = "padding-top: 1%"> To illustrate the difference between linear and logistic regression, let  x be our vector of parameters (PEG ratio, PE ratio, etc) and 𝛳 be the vector of weights for each of those parameters.  </p>
 				<h5> <u> Linear Regression </u></h5>
 					<ul class = "browser-default">
-					  <li>h𝛳(x)=𝛳Tx  where h𝛳(x) is some y value</li>
+					  <li>h𝛳(x)=𝛳^Tx  where h𝛳(x) is some y value</li>
 					</ul>
         <h5> <u> Logistic Regression </u></h5>
           <ul class = "browser-default">
@@ -72,7 +73,7 @@
             </li>
 
             <li>A logistic regression is the same as a linear regression except
-              h𝛳(x)= g(𝛳Tx) = g(x) where g is the sigmoid function 1/  (1 + e^x) </li>
+              h𝛳(x)= g(𝛳Tx) = g(x) where g is the sigmoid function 1/  (1 + e^-x) </li>
           </ul>
 
           <hr style = "color : red">
@@ -147,35 +148,38 @@
               <p style = "padding-top: 1%"> A neural network is a way for us to capture non linear relationships in our data. I built one with the Keras library. Ultimately it was utterly unsuccessful and only predicted sell signals. I’m far from an expert in neural networks, but after building some rough models I really doubt that there is any meaningful non linear relationship in our data. Because of this I’m actually not going to explain how I built it right now. The explanation is a bit involved. If you are curious I’ll link a write up I made about it in the appendix, but for now let’s start testing our strategies and see if we can make some money!
 
             <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Backtesting </h4>
-            <p style = "padding-top: 1%"> Backtesting is the process by which we are going to test our strategy on historical data.  I created a script to handle the process for us and we will backtest against the last 3 years of historical data we have. For the first backtest, I’m going to test our strategy for each company against a random and long only strategy (one where we buy at the beginning and just hold for the entire period). I’m testing our second strategy (where we used only significant factors) because it had the highest accuracy on the validation set. The backtest was conducted with $10,000 starting for each company. The average risk adjusted returns across all companies were then calculated.
-              <img style = "padding-top: 2%;" src = "images/mlUtility/Backtest1.png"  width = 100% >
+            <p style = "padding-top: 1%"> Backtesting is the process by which we are going to test our strategy on historical data.  I created a script to handle the process for us and we will backtest against the last 3 years of historical data we have. For the first backtest, I’m going to test our strategy for each company against a random and long only strategy (one where we buy at the beginning and just hold for the entire period). I’m testing our second strategy (where we used only significant factors) because it had the highest accuracy on the validation set. The backtest was conducted with $10,000 starting for each company. The average returns across all companies were then calculated.
+              <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest1.png"  width = 100% >
               <p style = "padding-top: 1%"> Alright so as shown by the graph, in almost all cases, our strategy soundly beat random. It was on par with long only, though this was to be expected since we were mostly just predicting buy signals anyways.
                 <ul class = "browser-default">
-                  <li> AVERAGE STRAT RETURN: 4.11 %</li>
-                  <li> AVERAGE LONG RETURN: 4.14 % </li>
-                  <li> AVERAGE RANDOM RETURN: 0.18 %</li>
-                  <li> AVERAGE PERFECT RETURN: 14.13 % </li>
+                  <li> AVERAGE STRAT RETURN: 21.65 %</li>
+                  <li> AVERAGE LONG RETURN: 22.15% </li>
+                  <li> AVERAGE RANDOM RETURN: 0.65 %</li>
+                  <li> AVERAGE PERFECT RETURN: 139.04 % </li>
+                  <li> SHARPE RATIO: .43 </li>
                 </ul>
               <p style = "padding-top: 1%"> This shows just how close the two strategies are
-                <img style = "padding-top: 2%;" src = "images/mlUtility/backtest1b.png"  width = 100% >
+                <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest1b.png"  width = 100% >
 
               <p style = "padding-top: 1%">I'm interested in seeing if we can get more alpha by using our original strategy, which predicted more sells.
                   <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest2.png"  width = 100% >
-              <p style = "padding-top: 1%"> Unfortunately, this one fared even worse. Does that mean our model is completely useless. Well not exactly. Lets say we backtest over the entire time period. I know this isn't realistic given that we are testing on data we trained on, but we might get some insights about our data.
+              <p style = "padding-top: 1%"> Unfortunately, this strategy didn't make much of a difference. Although our Shapre Ratio improved a bit to .53. Does that mean our model is completely useless. Well not exactly. Lets say we backtest over the entire time period. I know this isn't realistic given that we are testing on data we trained on, but we might get some insights about our data.
                   <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest3.png"  width = 100% >
               <p style = "padding-top: 1%"> You'll notice that while our strategy does get beat during periods of growth, it does a good job hedging against losses during periods of contraction, most noteably 2001-2002 and 2008. Returns looked like this over the entire time span:
                 <ul class = "browser-default">
-                  <li> AVERAGE STRAT RETURN: 37.43 %</li>
-                  <li> AVERAGE LONG RETURN: 24.59 % </li>
-                  <li> AVERAGE PERFECT RETURN: 1033.13 % </li>
+                  <li> AVERAGE STRAT RETURN: 301.43 %</li>
+                  <li> AVERAGE LONG RETURN: 138.59 % </li>
+                  <li> AVERAGE PERFECT RETURN: 13224.09 % </li>
+                  <li> SHARPE RATIO: .79 </li>
                 </ul>
               <p style = "padding-top: 1%">This got me thinking, what if we longed during bull markets and deployed our strategy only during bear markets. Maybe this best of both worlds approach will lead us to greater returns.
-                  <p style = "padding-top: 1%">I ran a version of the backtest which employed our strategy only during the years 2001,2002, and 2008. Sure enough, it achieved an average risk adjusted ROI of 43 % over the time span,  6% higher than what our strategy alone generated.
+                  <p style = "padding-top: 1%">I ran a version of the backtest which employed our strategy only during the years 2001,2002, and 2008. Sure enough, it achieved an ROI of 318.04 % over the time span,  17% higher than what our strategy alone generated.
                 <p style = "padding-top: 1%">  Again, I realize it is unrealistic to test against data that we have trained on, however this graph shows that our strategy can perhaps be useful to deploy during bear markets.
 
               <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Moving Forward </h4>
                 <p style = "padding-top: 1%"> Throughout this whole process, creating more complicated models did not yield better returns. This means that the only way from here for us to push our alpha generation further is for us to come up with different factors that might have a large impact on the industry.
                   For this, one needs to some good old fashioned industry research. Right now I think that interest rates might be worth looking into. We already discovered that debt is a very important metric for this industry. Surely interest rates, which govern how onerous that debt is, would have an effect on price movements. I’ll write in an update when I plug interest rates into the model.
+                  In the future I could pick a different test measure than just accuracy. Sharpe Ratio might be a good one for example. Also, I could adjust the threshold of probabilities needed to return a buy signal. Right now we return buy if the probability is greater than .5.
 
 
 

@@ -29,27 +29,35 @@
 		 </div>
 
 		 <div class = "col s6">
-			 <h2 style = "font-family: 'Raleway', sans-serif; color: blue"> An ML Exploration of Utility Companies </h2>
+			 <h2 style = "font-family: 'Raleway', sans-serif; color: blue"> PCA based Mean Reversion  </h2>
        <p> <b> by: Rishub Nahar </b>
 			 <hr style = "color : red">
 
-			 <p style = "padding-top: 5%"> This project was an experiment in trying to use some basic machine learning techniques to create a trading strategy that performs better than random. This isn’t a coding or a math tutorial, it is an exploration of how we might be able to work with our data to make more accurate models. I will explain whatever math and code needed, but all you need is an interest to learn more about machine learning or trading strategies. With that, let’s get started ! </p>
+			 <p style = "padding-top: 5%"> This project was an experiment in trying to use principal component analysis to identify optimal mean reverting portfolios</p>
 
 			 <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Premise </h4>
 			  <p style = "padding-top: 1%">
-          We want to build a trading strategy that accurately tells us when to buy or sell stock of major Utility Companies in the S&P 500. The reason we are choosing the Utilities industry is because there is relatively little differentiation in business models and products across companies. As a result, I hypothesize that a similar set of factors are most influential for the majority of companies in this industry. In an industry like tech on the other hand, the big players each have their own specialization and set of services. Microsoft and Amazon for example, have many differences between their business models and core services, so it would be harder to train an effective model on the industry as a whole.
-				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Getting Data </h4>
+          Traditional Mean Reversion is a strategy we deploy when we believe that a certain time series is relatively stationary. That is we believe the mean and variance are relatively constant throughout time.
+          Traditional Mean Reversion entails longing a security or portfolio when the returns or price ratios fall significantly below the moving average, and shorting it when the returns rise significantly above the moving average.
+
+          Notice that we use returns or price ratios and not actual price value of the security as our Mean Reverting metric. This is fair because the price of any security is likely to be affected by market trends, momentum etc. Because of their trending nature, price is not a good metric to base a mean reverting strategy off of
+          <img src = "images/ReturnsVsPrice.png" width = 100%>
+          Notice how returns(left) compared to price(right) are far more stationary
+          Another way you can think of it, is does the time series demonstrate significant autocorrelation. That is, how correlated is one part of a time series with another section at a delayed interval
+
+
+				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Proposal </h4>
  				<p style = "padding-top: 1%">
-          I retrieved the monthly data for 10 of the major utility companies in the S&P500 from 2000-2015. The data included 70 factors for each month including some common ones you’ve probably heard of like the PE and PEG ratios, as well as some more obscure metrics. I retrieved the data from the Wharton Research Database.
-				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Prepping Data </h4>
-				<p style = "padding-top: 1%">In order to create an accurate model, we need to “teach” our program when to buy and when to sell. To do this we will train our program on a part of our data that we have labeled. When I say label, I mean for each month we are literally going to place a buy or sell signal 1 or 0 based off of the change in price  in the next month. For example if the stock goes up 3%  from the current month to the next month  that means the current month will be labeled a buy : 1 . For example : </p>
-				<img src = "images/LabeledData.png" width = 100%>
-				<p style = "padding-top: 1%">Just keep in mind that the actual data set we have 70 different factors and a dozen or so companies.  We will be storing all this labeled data in an output file simply named “outCopy.csv” </p>
-				<p style = "padding-top: 1%"> One thing is left before we start building models, we need to normalize our data.  Currently you see that each factor is on a widely  different scale. pe_op_basic fluctuates between 10 and 15 while bm really stays at around 1.1-1.4, meaning that even small changes in it are potentially a big deal. However, the computer just sees numbers and as a result  may put undue weight on pe_op_basic as a factor in its prediction, simply because its numbers are larger. To avoid this we will subtract every value in each column by the minimum of that column and divide that value by the max of col - min col. </p> <b >zi= (xi−min(x)) / (max(x)−min(x)) </b>
-          <p style = "padding-top: 1%; padding-left : 3.8em">
-
-
-          </p>
+          Price time series lacks stationarity because it is affected by larger economic and market trends. By using Principal Component Analysis (PCA) we can discard the components of our data that are responsible for the most variance, and then trade  off of the remaining components which I believe will be mean reverting.
+          First let's go over the basics of PCA
+				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> AN OVERVIEW OF PCA </h4>
+				<p style = "padding-top: 1%">
+PCA is a dimensionality reduction method that projects potentially correlated variables as independent (orthogonal) components in a lower dimensional subspace. The basic premise of PCA is to capture as much variance in the data as possible with as few dimensions.
+				<img src = "images/PCAexplain.png" width = 100%>
+				<p style = "padding-top: 1%">
+Notice how on the left the data is represented by 3 dimensions but most of the data is centered around a 2d plane. By using two vectors that span or describe the plan the as the axis of our new space, we can represent the data in a more condensed matter.
+        </p> <b >zi= (xi−min(x)) / (max(x)−min(x)) </b>
+      
 
         <div>
   				<img style = "padding-top: 1%; float : left" src = "images/unNormalData.png" width = 50% height  = 600px>
@@ -180,8 +188,6 @@
                 <p style = "padding-top: 1%"> Throughout this whole process, creating more complicated models did not yield better returns. This means that the only way from here for us to push our alpha generation further is for us to come up with different factors that might have a large impact on the industry.
                   For this, one needs to some good old fashioned industry research. Right now I think that interest rates might be worth looking into. We already discovered that debt is a very important metric for this industry. Surely interest rates, which govern how onerous that debt is, would have an effect on price movements. I’ll write in an update when I plug interest rates into the model.
                   In the future I could pick a different test measure than just accuracy. Sharpe Ratio might be a good one for example. Also, I could adjust the threshold of probabilities needed to return a buy signal. Right now we return buy if the probability is greater than .5.
-
-
 
 		</div>
 	</body>

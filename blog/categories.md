@@ -1,10 +1,12 @@
 
-# Algorithmic Trading Strategies
+# RISHUB BLOG
+
+## Algorithmic Trading Strategies
 
 A couple of my most interesting stock trading strategies.
 
 1) [PCA Mean Reversion](https://rishubnahar.com/blog/pca_Mean_Reversion.html)
-      - Trading strategy that identifies optimal mean reverting portfolios based off of principal component analysis. 
+      - Trading strategy that identifies optimal mean reverting portfolios based off of principal component analysis.
 
 2) [ML for Utility Stocks](https://rishubnahar.com/blog/utilityML.html)
       - Created strategy to predict buy or sell signals for utility companies in the S&P 500 with logistic regressions

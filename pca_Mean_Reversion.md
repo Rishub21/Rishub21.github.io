@@ -9,7 +9,7 @@ Traditional Mean Reversion entails longing a security or portfolio when the retu
 
 Notice that we use returns or price ratios and not actual price value of the security as our Mean Reverting metric. This is fair because the price of any security is likely to be affected by market trends, momentum etc. Because of their trending nature, price is not a good metric to base a mean reverting strategy off of
 
-![image info](images/ReturnsVsPrice.png)
+![image info](blog_images/ReturnsVsPrice.png)
 
 
 Notice how returns compared to price are far more stationary
@@ -25,7 +25,7 @@ But first ...
 ## AN OVERVIEW OF PCA
 
 PCA is a dimensionality reduction method that projects potentially correlated variables as independent (orthogonal) components in a lower dimensional subspace. The basic premise of PCA is to capture as much variance in the data as possible with as few dimensions.
-![image info](images/PCAexplain.png)
+![image info](blog_images/PCAexplain.png)
 
 Notice how on the left the data is represented by 3 dimensions but most of the data is centered around a 2d plane. By using two vectors that span or describe the plan the as the axis of our new space, we can represent the data in a more condensed matter.
 
@@ -45,7 +45,7 @@ This is what PCA will do. It will identify some x number (where we specify x) of
 
 ## DETERMINING  WHICH COMPONENT TO USE  
 Creating a rigorous way to determine the best component to use is definitely a way that I can expand this project. But keep in mind the first few components will explain the vast majority of the variance in the data.  
-![image info](images/VarianceOfComponents.png)
+![image info](blog_images/VarianceOfComponents.png)
 
 
 
@@ -53,7 +53,7 @@ In essence these components should account for market trends and big drivers of 
 
 
 To validate this theory, I graphed the value of portfolios suggested by the first component and by the last one   
-![image info](images/1vs20PCA.png)
+![image info](blog_images/1vs20PCA.png)
 
 This validates our hypothesis. You can clearly see that the first component is highly correlated with the value of an equally weight basket. Whereas the last component is far more stationary. I ran an Augmented Dicky Fuller Test on these time series which essentially test the null hypothesis  that it is stationary.   Component 1 had a pval of .98 whereas Component 20 had a pval of .11. This affirms our statement.
 
@@ -67,7 +67,7 @@ Now that we have verified that our last component is indeed stationary we can tr
 
 The result was as follows : Sharpe 2.29   
 
-![image info](images/PCABacktest_1.png)
+![image info](blog_images/PCABacktest_1.png)
 
 
 Strategy did quite well up until 2016. I do wonder what factors changed that led to the collapse in recent years. I’ll also probably want to see how the current upward trend plays out.
@@ -76,7 +76,7 @@ I thought  we might be suffering because I was running pca on the total data col
 
 I tried rerunning the strategy but changing it so that we rebalanced our portfolio only on the last month of data. It performed very well during first half, but again strategy collapsed.
 
-![image info](images/PCABacktest_2.png)
+![image info](blog_images/PCABacktest_2.png)
 
 ## Future Optimizations
 

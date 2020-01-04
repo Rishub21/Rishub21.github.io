@@ -43,7 +43,7 @@
           I retrieved the monthly data for 10 of the major utility companies in the S&P500 from 2000-2015. The data included 70 factors for each month including some common ones you’ve probably heard of like the PE and PEG ratios, as well as some more obscure metrics. I retrieved the data from the Wharton Research Database.
 				<h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Prepping Data </h4>
 				<p style = "padding-top: 1%">In order to create an accurate model, we need to “teach” our program when to buy and when to sell. To do this we will train our program on a part of our data that we have labeled. When I say label, I mean for each month we are literally going to place a buy or sell signal 1 or 0 based off of the change in price  in the next month. For example if the stock goes up 3%  from the current month to the next month  that means the current month will be labeled a buy : 1 . For example : </p>
-				<img src = "images/LabeledData.png" width = 100%>
+				<img src = "blog_images/LabeledData.png" width = 100%>
 				<p style = "padding-top: 1%">Just keep in mind that the actual data set we have 70 different factors and a dozen or so companies.  We will be storing all this labeled data in an output file simply named “outCopy.csv” </p>
 				<p style = "padding-top: 1%"> One thing is left before we start building models, we need to normalize our data.  Currently you see that each factor is on a widely  different scale. pe_op_basic fluctuates between 10 and 15 while bm really stays at around 1.1-1.4, meaning that even small changes in it are potentially a big deal. However, the computer just sees numbers and as a result  may put undue weight on pe_op_basic as a factor in its prediction, simply because its numbers are larger. To avoid this we will subtract every value in each column by the minimum of that column and divide that value by the max of col - min col. </p> <b >zi= (xi−min(x)) / (max(x)−min(x)) </b>
           <p style = "padding-top: 1%; padding-left : 3.8em">
@@ -52,8 +52,8 @@
           </p>
 
         <div>
-  				<img style = "padding-top: 1%; float : left" src = "images/unNormalData.png" width = 50% height  = 600px>
-          <img style = "padding-left: 2%;" src = "images/normalizedData.png" width = 50% height  = 600px>
+  				<img style = "padding-top: 1%; float : left" src = "blog_images/unNormalData.png" width = 50% height  = 600px>
+          <img style = "padding-left: 2%;" src = "blog_images/normalizedData.png" width = 50% height  = 600px>
           <p style = "padding-top: 1%" align = "center"> <i> Taking data on right and normalizing it on a 0-1 scale (left) will allow our modell to optimize the parameters more accurately. This will also be very important when we conduct dimensionality reduction later on. </i> </p>
           <p style = "padding-top: 1%">  We are going to reserve the last 3 years of data we have as our test set. The years before we are going to do an 80:20 split to get our training and validation set. Our training set will as the name suggests "train" our model and tune the parameters. Our models that do the best on the validation, will then be backtested on our test set to see their profitability. </p>
 
@@ -79,9 +79,9 @@
           <hr style = "color : red">
 
 
-    			<img style = "padding-top: 1%;" src = "images/firstModel.png" width = 100% >
+    			<img style = "padding-top: 1%;" src = "blog_images/firstModel.png" width = 100% >
           <p style = "padding-top: 1%"> We run the code and get the following results
-          <img style = "padding-top: 1%;" src = "images/mlUtility/firstModelResults.png" >
+          <img style = "padding-top: 1%;" src = "blog_images/mlUtility/firstModelResults.png" >
 
           <hr style = "color : red">
 
@@ -89,7 +89,7 @@
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%">  Model 2 : Significant Factors </h4>
           <p style = "padding-top: 1%"> My concern is that of the 70 factors, a lot of them are just noise that are cluttering our model. If we can isolate the most useful factors and train our model off of those, perhaps we can get better results.
               With the handy summary command in r, we automatically get a list of all the factors and their p-values in our original model. P-value being the probability that the specific factor has a weight of zero and had no effect in the regression. The factors with low p-values <.05 are statistically significant and as a result have large coefficients or 𝛳 values in the regression. We are going to be using only those statistically significant factors in our second regression
-          <img style = "padding-top: 5%;" src = "images/pvalues.png" width = 100%>
+          <img style = "padding-top: 5%;" src = "blog_images/pvalues.png" width = 100%>
           <p style = "padding-top: 1%">Before we run the original model on these significant factors, I would like to note something interesting. The factors that the model declared significant were as follows :
             <ul class = "browser-default">
               <li> Debt to EBITDA </li>
@@ -111,36 +111,36 @@
           <p style = "padding-top: 1%">Notice something interesting? Out of the 14 factors,  7 were debt related ratios. This is no coincidence. Utility companies must take on large amounts of debt because of the capital intensive nature of the industry. Thus, the companies that are able to utilize that debt efficiently, position themselves for strong growth in their equity prices. This is pretty cool. With no fundamental knowledge of this industry before hand, our model, as simple as it is, was able to detect this industry insight. Of course I’m not saying that our model is in anyway a replacement for solid industry research. It is however a data driven way for us to create and confirm hypothesis about the industry.
 
           <p style = "padding-top: 1%"> When we run our original model just on these significant factors we get :
-            <img style = "padding-top: 5%;" src = "images/mlUtility/secondModelResults.png" width = 100%>
+            <img style = "padding-top: 5%;" src = "blog_images/mlUtility/secondModelResults.png" width = 100%>
 
           <p style = "padding-top: 1%"> So our accuracy actually shot up a good bit. The thing that concerns me though is that if you look at it closely, our model is pretty much just predicting buy, 94% of the time to be exact. That’s not much different from a long only strategy. I’m not content with this, so lets try another strategy for dimensionality reduction
 
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Model 3 : Principal Component Analysis (PCA) </h4>
           <p style = "padding-top: 1%"> If you’re unfamiliar or rusty with PCA, no worries. I’ll go over the intuition.
               PCA is a powerful dimensionality reduction tool where essentially we project our data into a lower dimensional subspace, while minimizing the perpendicular squared errors.
-          <img style = "padding-top: 5%;" src = "images/PCAexplain.png" width = 100%>
+          <img style = "padding-top: 5%;" src = "blog_images/PCAexplain.png" width = 100%>
           <p style = "padding-top: 1%" align = "center"> <i> Source : NLPCA </i> </p>
           <p style = "padding-top: 1%"> Take this for example. We have all this data on the left in a 3 dimensional space. But really, you will notice that much of the data is clustered around a plane. And if you project the data on that plane as shown in the right, you  get the general idea of the data.
           <p style = "padding-top: 1%"> Mathematically speaking, PCA takes potentially correlated variables and make uncorrelated orthogonal components
           <p style = "padding-top: 1%"> The benefit is that we are able to retain the vast majority of relevant information (variance) in the data, while using fewer dimensions. When we conduct PCA on our data, we see how much cumulative variance each principal component accounts for.
-          <img style = "padding-top: 5%;" src = "images/PCA_variance_explained.png" width = 100%>
+          <img style = "padding-top: 5%;" src = "blog_images/PCA_variance_explained.png" width = 100%>
           <p style = "padding-top: 1%"> The graph below shows that the first couple of principle components do an excellent job at capturing variance. We’d like to capture at least 95% of the variance in the data set, so we will use the first 21 components, effectively meaning we’ve reduced our dimensionality from 70-21. Hopefully by doing so, we have reduced noise and collinearities or redundancies in our data.
-          <img style = "padding-top: 5%;" src = "images/PCSummaryGraph.png" width = 100%>
+          <img style = "padding-top: 5%;" src = "blog_images/PCSummaryGraph.png" width = 100%>
 
           <p style = "padding-top: 5%"> When we run the original model on the first 21 components we get :
-            <img style = "padding-top: 5%;" src = "images/mlUtility/thirdModelResults.png" width = 100%>
+            <img style = "padding-top: 5%;" src = "blog_images/mlUtility/thirdModelResults.png" width = 100%>
           <p style = "padding-top: 5%"> With PCA, our model is about as accurate it originally was. However, it is much worse than before at predicting sell signals.
           <p style = "padding-top: 1%">  I wonder. Perhaps a binary classification between buy and sell is not enough. Perhaps introducing a hold signal would be useful. My thought is if our program only learns from the best examples of buy or sell, those where the price fluctuates greatly, then it will be able to produce better predictions. For example, right now if the price of a stock goes up by .1% vs down by .1%, how much of a difference is there really in the factors? Probably not much. Between a 5% up vs a 5% down, there is probably a more substantial difference, and we want our model to focus on that.
           <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Model 4 : Linear Discriminant Analysis (LDA) </h4>
           <p style = "padding-top: 1%"> We are going to move away from binary classification by using Linear Discriminant Analysis, a second dimensionality reduction technique that might help us out
           <p style = "padding-top: 1%"> You can think of LDA as a supervised clustering algorithm of sorts. The LDA is similar to the PCA in that it is meant to project data onto a lower dimensional subspace. However, instead of trying to minimize perpendicular squared errors, we are trying to form distinct groups of the data where we  maximize the space between the groups’ means  and minimize the variation within each group. Essentially, we are trying to make tight and well separated clusters of our data.
-            <img style = "padding-top: 2%;" src = "images/LDAPic2.png" align = "center" width = 100% height = 500px>
+            <img style = "padding-top: 2%;" src = "blog_images/LDAPic2.png" align = "center" width = 100% height = 500px>
           <p style = "padding-top: 1%"> This is a good idea of what’s going on.  In both the left and the right line, the 2D data is being projected onto a lower 1 dimensional subspace. The left line however, has groupings that are all mixed together and is therefore a bad choice. The right line has clearly separated groups. This way, in the future, given a set of factors we can project that data onto either the red blue or green part of the line and predict the corresponding category for that data. It’s just instead of red blue green we are doing buy, sell, hold.
           <p style = "padding-top: 1%">  To make sure we are giving our computer only the very best examples of a buy and sell label. I made a modification to our processing script so that it labels a month a buy only if the next month moves up in price in a magnitude that is greater than the average price increase has been up until that point. I did the same for sells, and the rest of the times when the stock doesn't move enough, I labeled the month as a hold.
           <p style = "padding-top: 1%">  When we run this new model, (note: this is no longer a logistic regression) we get:
-            <img style = "padding-top: 2%;" src = "images/mlUtility/LDAResults.png"  width = 100% >
+            <img style = "padding-top: 2%;" src = "blog_images/mlUtility/LDAResults.png"  width = 100% >
           <p style = "padding-top: 1%">  Uhh, our model is really only predicting holds. I thought about this for a bit and I guess we were a little too harsh in our standards of labeling what is a buy and what is a sell. As such, most of our labels in our training data were holds, and our model probably just didn’t get to train on enough examples of buys and sells.  When I relabled with looser standards we were getting a similar accuracy, it's just that then the model was back to the problem of really only predicting buys signals. Let’s look into why this may be the case. The figure below shows the clusters of buys (1), sells (-1), and holds (0) that our model generated.
-            <img style = "padding-top: 2%;" src = "images/LDAGraph.png"  width = 100% >
+            <img style = "padding-top: 2%;" src = "blog_images/LDAGraph.png"  width = 100% >
           <p style = "padding-top: 1%"> As you can see our LDA was utterly ineffective in projecting our data. Instead of well demarcated clusters, we just got a mess, suggesting there is simply too much noise to make a clean linear classification.
           <p style = "padding-top: 1%"> Hmmmm. Linear Classification. That has been the one common theme of all our models so far. I wonder perhaps if there is a non linear relationship in our data. If so how would we capture it?
 
@@ -149,7 +149,7 @@
 
             <h4 style = "font-family: 'Raleway', sans-serif; color: blue; padding-top : 5%"> Backtesting </h4>
             <p style = "padding-top: 1%"> Backtesting is the process by which we are going to test our strategy on historical data.  I created a script to handle the process for us and we will backtest against the last 3 years of historical data we have. For the first backtest, I’m going to test our strategy for each company against a random and long only strategy (one where we buy at the beginning and just hold for the entire period). I’m testing our second strategy (where we used only significant factors) because it had the highest accuracy on the validation set. The backtest was conducted with $10,000 starting for each company. The average returns across all companies were then calculated.
-              <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest1.png"  width = 100% >
+              <img style = "padding-top: 2%;" src = "blog_images/mlUtility/BackTest1.png"  width = 100% >
               <p style = "padding-top: 1%"> Alright so as shown by the graph, in almost all cases, our strategy soundly beat random. It was on par with long only, though this was to be expected since we were mostly just predicting buy signals anyways.
                 <ul class = "browser-default">
                   <li> AVERAGE STRAT RETURN: 21.65 %</li>
@@ -159,12 +159,12 @@
                   <li> SHARPE RATIO: .43 </li>
                 </ul>
               <p style = "padding-top: 1%"> This shows just how close the two strategies are
-                <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest1b.png"  width = 100% >
+                <img style = "padding-top: 2%;" src = "blog_images/mlUtility/BackTest1b.png"  width = 100% >
 
               <p style = "padding-top: 1%">I'm interested in seeing if we can get more alpha by using our original strategy, which predicted more sells.
-                  <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest2.png"  width = 100% >
+                  <img style = "padding-top: 2%;" src = "blog_images/mlUtility/BackTest2.png"  width = 100% >
               <p style = "padding-top: 1%"> Unfortunately, this strategy didn't make much of a difference. Although our Shapre Ratio improved a bit to .53. Does that mean our model is completely useless. Well not exactly. Lets say we backtest over the entire time period. I know this isn't realistic given that we are testing on data we trained on, but we might get some insights about our data.
-                  <img style = "padding-top: 2%;" src = "images/mlUtility/BackTest3.png"  width = 100% >
+                  <img style = "padding-top: 2%;" src = "blog_images/mlUtility/BackTest3.png"  width = 100% >
               <p style = "padding-top: 1%"> You'll notice that while our strategy does get beat during periods of growth, it does a good job hedging against losses during periods of contraction, most noteably 2001-2002 and 2008. Returns looked like this over the entire time span:
                 <ul class = "browser-default">
                   <li> AVERAGE STRAT RETURN: 301.43 %</li>

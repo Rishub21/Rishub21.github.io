@@ -1,4 +1,5 @@
 # Questions that Drive Me
+(Inspired by Will Robbins)
 
 1) How can we replicate the ecosystem of Silicon Valley across this nation?
 2) What's the best way to retrain workers hurt by trade?

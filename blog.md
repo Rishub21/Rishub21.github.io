@@ -3,9 +3,7 @@
 
 ## Algorithmic Trading Strategies
 
-I think alot about financial inclusivity, and also about algorithmic trading. When we think about the latter, it often brings about brazen images of vast amounts of capital, flowing to enrichen industry giants. 
-
-This is the opposite. These are a few simple algorithmic strategies that even someone with a few hundred dollars to spare can utilize. 
+I wrote these trading strategies in college to better understand the concepts I was learning in my math and stats classes. They are ordered roughly by how effective they were. 
 
 1) [PCA Mean Reversion](https://rishubnahar.com/blogCategories/pca_Mean_Reversion.html)
       - Trading strategy that identifies optimal mean reverting portfolios based off of principal component analysis.

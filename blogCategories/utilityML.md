@@ -39,6 +39,19 @@ To illustrate the difference between linear and logistic regression, let  x be o
 
 ![image info](blog_images/firstModel.png)  
 
+We run the code and get the following results: 
+![image info](blog_images/firstModelResults.png)   
+
+Not bad, after just 30 lines of code, our model is already predicting better than random. But don’t get your hopes up, all those 48% times where we make the wrong call is where we can lose big money. Plus it looks like our model is missing a lot of sell calls. 98 times we predicted a buy when it should have been a sell. Let’s try to push this thing and really see how accurate we can be. 
+
+## Second Model: Significant Factors 
+My concern is that of the 70 factors, a lot of them are just noise that are cluttering our model. If we can isolate the most useful factors and train our model off of those, perhaps we can get better results.
+
+With the handy summary command in r, we automatically get a list of all the factors and their p-values in our original model. P-value being the probability that the specific factor has a weight of zero and had no effect in the regression. The factors with low p-values <.05 are statistically significant and as a result have large coefficients or 𝛳 values in the regression. We are going to be using only those statistically significant factors in our second regression 
+
+![image info](blog_images/pvalues.png)   
+
+
 
 
 

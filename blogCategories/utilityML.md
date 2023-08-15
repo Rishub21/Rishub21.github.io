@@ -70,6 +70,25 @@ Before we run the original model on these significant factors, I would like to n
 - Asset Turnover Ratio
 - % Monthly Change 
 
+Notice something interesting? Out of the 14 factors,  7 were debt related ratios. This is no coincidence. Utility companies must take on large amounts of debt because of the capital intensive nature of the industry. Thus, the companies that are able to utilize that debt efficiently, position themselves for strong growth in their equity prices. This is pretty cool. With no fundamental knowledge of this industry before hand, our model, as simple as it is, was able to detect this industry insight. Of course I’m not saying that our model is in anyway a replacement for solid industry research. It is however a data driven way for us to create and confirm hypothesis about the industry.
+
+
+When we run our original model just on these significant factors we get
+
+![image info](blog_images/secondModelResults.png)  
+
+So our accuracy actually shot up a good bit. The thing that concerns me though is that if you look at it closely, our model is pretty much just predicting buy, 94% of the time to be exact. That’s not much different from a long only strategy. I’m not content with this, so lets try another strategy for dimensionality reduction 
+
+## Model 3 : Principal Component Analysis (PCA) 
+If you’re unfamiliar or rusty with PCA, no worries. I’ll go over the intuition.
+
+PCA is a powerful dimensionality reduction tool where essentially we project our data into a lower dimensional subspace, while minimizing the perpendicular squared errors.
+![image info](blog_images/PCAexplain.png)  
+
+
+
+
+
 
 
 

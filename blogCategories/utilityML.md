@@ -20,6 +20,28 @@ One thing is left before we start building models, we need to normalize our data
 
 ![image info](blog_images/unNormalData.png)  ![image info](blog_images/normalizedData.png) 
 
+Taking data on right and normalizing it on a 0-1 scale (left) will allow our modell to optimize the parameters more accurately. This will also be very important when we conduct dimensionality reduction later on. 
+
+We are going to reserve the last 3 years of data we have as our test set. The years before we are going to do an 80:20 split to get our training and validation set. Our training set will as the name suggests "train" our model and tune the parameters. Our models that do the best on the validation, will then be backtested on our test set to see their profitability.
+
+
+## First Model 
+Finally we can start talking about our first model. We are faced with a binary classification problem. We want the computer to predict, based off the factors of that month, a buy signal (1) or a sell signal (0). Lets look in our toolbox. A linear regression wouldn’t make sense because it predicts continuous y values based on our x parameters. We want to in essence “cap” the regression so it can only predict a 0 or a 1. 
+
+To illustrate the difference between linear and logistic regression, let  x be our vector of parameters (PEG ratio, PE ratio, etc) and 𝛳 be the vector of weights for each of those parameters. 
+
+**Linear Regression**
+ - h𝛳(x)=𝛳^Tx  where h𝛳(x) is some y value 
+**Logistic Regression** 
+- h𝛳(x) = p(y=1 | x;𝛳) That is our value is the probability that y = 1 ( a buy in our case) given the factors x which have weights 𝛳
+- A logistic regression is the same as a linear regression except h𝛳(x)= g(𝛳Tx) = g(x) where g is the sigmoid function 1/  (1 + e^-x) 
+
+
+![image info](blog_images/firstModel.png)  
+
+
+
+
 
 
 

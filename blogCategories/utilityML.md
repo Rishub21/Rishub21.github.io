@@ -49,9 +49,26 @@ My concern is that of the 70 factors, a lot of them are just noise that are clut
 
 With the handy summary command in r, we automatically get a list of all the factors and their p-values in our original model. P-value being the probability that the specific factor has a weight of zero and had no effect in the regression. The factors with low p-values <.05 are statistically significant and as a result have large coefficients or 𝛳 values in the regression. We are going to be using only those statistically significant factors in our second regression 
 
-![image info](blog_images/pvalues.png)   
+![image info](blog_images/pvalues.png) 
 
 
+Before we run the original model on these significant factors, I would like to note something interesting. The factors that the model declared significant were as follows : 
+
+
+- Debt to EBITDA 
+- Earned Value Management 
+- Total Debt to Invested Capital 
+- Debt to Assets 
+- Long Term Debt : Equity 
+- Cash to Debt 
+- Debt to Assets
+- Debt to Capital 
+- Price to Sales 
+- Price/Earnings to Growth
+- Price to Earnings Basic
+- Price to Earnings Diluted
+- Asset Turnover Ratio
+- % Monthly Change 
 
 
 

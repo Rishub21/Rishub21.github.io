@@ -13,4 +13,13 @@ I retrieved the monthly data for 10 of the major utility companies in the S&P500
 In order to create an accurate model, we need to “teach” our program when to buy and when to sell. To do this we will train our program on a part of our data that we have labeled. When I say label, I mean for each month we are literally going to place a buy or sell signal 1 or 0 based off of the change in price  in the next month. For example if the stock goes up 3%  from the current month to the next month  that means the current month will be labeled a buy : 1 . For example :
 
 ![image info](blog_images/LabeledData.png)
-![image info](blog_images/ReturnsVsPrice.png)
+
+Just keep in mind that the actual data set we have 70 different factors and a dozen or so companies.  We will be storing all this labeled data in an output file simply named “outCopy.csv”  
+
+One thing is left before we start building models, we need to normalize our data.  Currently you see that each factor is on a widely  different scale. pe_op_basic fluctuates between 10 and 15 while bm really stays at around 1.1-1.4, meaning that even small changes in it are potentially a big deal. However, the computer just sees numbers and as a result  may put undue weight on pe_op_basic as a factor in its prediction, simply because its numbers are larger. To avoid this we will subtract every value in each column by the minimum of that column and divide that value by the max of col - min col
+
+![image info](blog_images/unNormalData.png)  ![image info](blog_images/normalizedData.png) 
+
+
+
+

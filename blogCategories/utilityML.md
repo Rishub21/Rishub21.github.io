@@ -85,6 +85,15 @@ If you’re unfamiliar or rusty with PCA, no worries. I’ll go over the intuiti
 PCA is a powerful dimensionality reduction tool where essentially we project our data into a lower dimensional subspace, while minimizing the perpendicular squared errors.
 ![image info](blog_images/PCAexplain.png)  
 
+Mathematically speaking, PCA takes potentially correlated variables and make uncorrelated orthogonal components 
+
+The benefit is that we are able to retain the vast majority of relevant information (variance) in the data, while using fewer dimensions. When we conduct PCA on our data, we see how much cumulative variance each principal component accounts for. 
+
+The graph below shows that the first couple of principle components do an excellent job at capturing variance. We’d like to capture at least 95% of the variance in the data set, so we will use the first 21 components, effectively meaning we’ve reduced our dimensionality from 70-21. Hopefully by doing so, we have reduced noise and collinearities or redundancies in our data. 
+![image info](blog_images/PCA_variance_explained.png)  
+
+
+
 
 
 
